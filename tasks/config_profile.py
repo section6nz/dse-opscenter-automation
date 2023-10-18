@@ -31,9 +31,9 @@ def create_config_profile(session_id, config: OpsCenterConfiguration, config_pro
         {"name": config_profile.name,
          "datastax-version": config.datastax_version,
          'json': {
-           "cassandra-env-sh": {},
+           "cassandra-env-sh": json.loads(config_profile.cassandra_env_sh) if config_profile.cassandra_env_sh else {},
            "cassandra-yaml": json.loads(config_profile.cassandra_yaml) if config_profile.cassandra_yaml else {},
-           "dse-env-sh": {}
+           "dse-env-sh": json.loads(config_profile.dse_env_sh) if config_profile.dse_env_sh else {}
          },
          "comment": 'LCM provisioned as %s' % config.config_profile_name}
     )
