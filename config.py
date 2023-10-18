@@ -93,8 +93,8 @@ class ConfigProfileConfiguration:
   def __init__(self, name, cassandra_yaml=None, cassandra_env_sh=None, dse_env_sh=None):
     self.name = name
     self.cassandra_yaml = cassandra_yaml
-    self.cassandra_env_sh = cassandra_yaml
-    self.dse_env_sh = cassandra_yaml
+    self.cassandra_env_sh = cassandra_env_sh
+    self.dse_env_sh = dse_env_sh
 
 
 class NodeSyncConfiguration:
