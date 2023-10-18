@@ -1,0 +1,59 @@
+opscenter:
+  opscenter_username: "admin"
+  opscenter_password: "opscenter"
+  opscenter_server_ip: "10.1.1.1"
+
+dse:
+  cluster_name: "cluster"
+  datastax_version: "6.8.36"
+  repository_name: "python"
+  install_credential_name: "python"
+  install_credential_username: "ubuntu"
+  install_credential_key_file: "SAMPLE/KEY/FILE.pem"
+  cassandra_default_password: "cassandra"
+  node_sync:
+    - pattern: dse_analytics.*
+    - pattern: dse_leases.*
+    - pattern: dse_perf.*
+    - pattern: OpsCenter.*
+    - pattern: solr_admin.*
+
+config_profiles:
+  - name: python-test
+  - name: config-test
+    cassandra_yaml: |
+      {
+        "num_tokens" : 8,
+        "client_encryption_options" : { "enabled" : true },
+        "server_encryption_options" : {
+          "internode_encryption" : "all",
+          "require_client_auth" : true,
+          "require_endpoint_verification" : false
+        }
+      }
+
+cluster:
+  config_profile_name: python-test
+  datacenters:
+    - name: "dc1"
+      solr_enabled: false
+      spark_enabled: false
+      graph_enabled: false
+      hadoop_enabled: false
+      config_profile_name: python-test
+      nodes:
+        - name: dse1
+          private_ip: 10.1.1.1 # private_ip
+          node_ip: 10.1.1.1 # ssh_ip
+          rack: rack1
+          config_profile_name: config-test
+    - name: "dc2"
+      solr_enabled: true
+      spark_enabled: false
+      graph_enabled: false
+      hadoop_enabled: false
+      nodes:
+        - name: dse2
+          private_ip: 10.1.1.2 # private_ip
+          node_ip: 10.1.1.2 # ssh_ip
+          rack: rack1
