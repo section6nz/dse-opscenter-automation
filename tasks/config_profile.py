@@ -33,7 +33,8 @@ def create_config_profile(session_id, config: OpsCenterConfiguration, config_pro
          'json': {
            "cassandra-env-sh": json.loads(config_profile.cassandra_env_sh) if config_profile.cassandra_env_sh else {},
            "cassandra-yaml": json.loads(config_profile.cassandra_yaml) if config_profile.cassandra_yaml else {},
-           "dse-env-sh": json.loads(config_profile.dse_env_sh) if config_profile.dse_env_sh else {}
+           "dse-env-sh": json.loads(config_profile.dse_env_sh) if config_profile.dse_env_sh else {},
+           "dse-yaml": json.loads(config_profile.dse_yaml) if config_profile.dse_yaml else {}
          },
          "comment": 'LCM provisioned as %s' % config.config_profile_name}
     )

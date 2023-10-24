@@ -26,6 +26,7 @@ SCHEMA_CONFIG = {
     Optional('cassandra_yaml'): Use(str),
     Optional('cassandra_env_sh'): Use(str),
     Optional('dse_env_sh'): Use(str),
+    Optional('dse_yaml'): Use(str),
   }],
   'cluster': {
     'config_profile_name': And(Use(str), lambda string: len(string) > 0),
@@ -89,12 +90,14 @@ class ConfigProfileConfiguration:
   cassandra_yaml = None
   cassandra_env_sh = None
   dse_env_sh = None
+  dse_yaml = None
 
-  def __init__(self, name, cassandra_yaml=None, cassandra_env_sh=None, dse_env_sh=None):
+  def __init__(self, name, cassandra_yaml=None, cassandra_env_sh=None, dse_env_sh=None, dse_yaml=None):
     self.name = name
     self.cassandra_yaml = cassandra_yaml
     self.cassandra_env_sh = cassandra_env_sh
     self.dse_env_sh = dse_env_sh
+    self.dse_yaml = dse_yaml
 
 
 class NodeSyncConfiguration:
@@ -156,7 +159,8 @@ class OpsCenterConfiguration:
                 config_profile['name'],
                 cassandra_yaml=config_profile['cassandra_yaml'] if 'cassandra_yaml' in config_profile else None,
                 cassandra_env_sh=config_profile['cassandra_env_sh'] if 'cassandra_env_sh' in config_profile else None,
-                dse_env_sh=config_profile['dse_env_sh'] if 'dse_env_sh' in config_profile else None
+                dse_env_sh=config_profile['dse_env_sh'] if 'dse_env_sh' in config_profile else None,
+                dse_yaml=config_profile['dse_yaml'] if 'dse_yaml' in config_profile else None
             )
           ]
         self.config_profiles = profiles
