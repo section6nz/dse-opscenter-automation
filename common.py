@@ -14,11 +14,11 @@ def get_session_token(config: OpsCenterConfiguration):
   if opscenter_session:
     return opscenter_session
 
-  endpoint = "http://%s:8888/login" % config.server_ip
+  endpoint = "%s/login" % config.server_url
 
   post_data = {"username": config.username, "password": config.password}
 
-  result = requests.post(endpoint, data=json.dumps(post_data))
+  result = requests.post(endpoint, data=json.dumps(post_data), verify=False)
   result_data = json.loads(result.text)
 
   session_id = result_data['sessionid']
@@ -27,8 +27,9 @@ def get_session_token(config: OpsCenterConfiguration):
 
 
 def do_get(config: OpsCenterConfiguration, session_id, url):
-  base_url = 'http://%s:8888/api/v2/lcm/' % config.server_ip
+  base_url = '%s/api/v2/lcm/' % config.server_url
   result = requests.get(base_url + url,
+                        verify=False,
                         headers={'Content-Type': 'application/json', 'opscenter-session': session_id})
   if result.status_code >= 400:
     logging.error("OpsCenter API request failed: url=%s, status=%d, response=%s", result.url, result.status_code,
@@ -40,8 +41,9 @@ def do_get(config: OpsCenterConfiguration, session_id, url):
 
 
 def do_post(config: OpsCenterConfiguration, session_id, url, post_data):
-  base_url = 'http://%s:8888/api/v2/lcm/' % config.server_ip
+  base_url = '%s/api/v2/lcm/' % config.server_url
   result = requests.post(base_url + url,
+                         verify=False,
                          data=json.dumps(post_data),
                          headers={'Content-Type': 'application/json', 'opscenter-session': session_id})
   if result.status_code >= 400:
@@ -54,8 +56,7 @@ def do_post(config: OpsCenterConfiguration, session_id, url, post_data):
 
 
 def update_nodesync(config: OpsCenterConfiguration, session_id, url, cluster_name, post_data):
-  base_url = 'http://%s:8888/' % config.server_ip
-  result = requests.post(base_url + cluster_name + url,
+  result = requests.post(config.server_url + cluster_name + url,
                          data=json.dumps(post_data),
                          headers={'Content-Type': 'application/json', 'opscenter-session': session_id})
   if result.status_code >= 400:
@@ -69,7 +70,7 @@ def update_nodesync(config: OpsCenterConfiguration, session_id, url, cluster_nam
 
 def wait_for_job(session_id, config: OpsCenterConfiguration, job_id):
   job_url = "jobs/%s" % job_id
-  base_url = 'http://%s:8888/api/v2/lcm/' % config.server_ip
+  base_url = '%s/api/v2/lcm/' % config.server_url
   job_log_url = base_url + 'opscenter/lcm.html#/jobs/%s' % job_id
 
   i = 0

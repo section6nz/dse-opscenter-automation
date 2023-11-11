@@ -1,7 +1,7 @@
 opscenter:
   opscenter_username: "admin"
   opscenter_password: "opscenter"
-  opscenter_server_ip: "10.1.1.1"
+  opscenter_server_url: "https://10.1.1.1:8443"
 
 dse:
   cluster_name: "cluster"

@@ -7,7 +7,7 @@ SCHEMA_CONFIG = {
   'opscenter': {
     'opscenter_username': And(Use(str), lambda string: len(string) > 0),
     'opscenter_password': And(Use(str), lambda string: len(string) > 0),
-    'opscenter_server_ip': And(Use(str), lambda string: len(string) > 0),
+    'opscenter_server_url': And(Use(str), lambda string: len(string) > 0),
   },
   'dse': {
     'cluster_name': And(Use(str), lambda string: len(string) > 0),
@@ -115,7 +115,7 @@ class OpsCenterConfiguration:
   config_profile_name = None
   username = None
   password = None
-  server_ip = None
+  server_url = None
   install_credential_name = None
   install_credential_username = None
   install_credential_key = None
@@ -135,7 +135,7 @@ class OpsCenterConfiguration:
 
       self.username = config['opscenter']['opscenter_username']
       self.password = config['opscenter']['opscenter_password']
-      self.server_ip = config['opscenter']['opscenter_server_ip']
+      self.server_url = config['opscenter']['opscenter_server_url']
 
       self.config_profile_name = config['cluster']['config_profile_name']
 
