@@ -13,9 +13,16 @@ SCHEMA_CONFIG = {
     'cluster_name': And(Use(str), lambda string: len(string) > 0),
     'datastax_version': And(Use(str), lambda string: len(string) > 0),
     'repository_name': And(Use(str), lambda string: len(string) > 0),
+    Optional('repository_url'): And(Use(str), lambda string: len(string) > 0),
+    Optional('repository_key_url'): And(Use(str), lambda string: len(string) > 0),
+    Optional('repository_use_proxy'): Use(bool),
     'install_credential_name': And(Use(str), lambda string: len(string) > 0),
     'install_credential_username': And(Use(str), lambda string: len(string) > 0),
-    'install_credential_key_file': And(Use(str), lambda string: len(string) > 0),
+    Optional('install_credential_key_file'): And(Use(str), lambda string: len(string) > 0),
+    Optional('install_credential_password'): And(Use(str), lambda string: len(string) > 0),
+    Optional('install_credential_become_user'): And(Use(str), lambda string: len(string) > 0),
+    Optional('install_credential_become_password'): And(Use(str), lambda string: len(string) > 0),
+    Optional('install_credential_become_mode'): And(Use(str), lambda string: len(string) > 0),
     'cassandra_default_password': And(Use(str), lambda string: len(string) > 0),
     Optional('node_sync'): [{
       'pattern': And(Use(str), lambda string: len(string) > 0),
@@ -112,6 +119,9 @@ class OpsCenterConfiguration:
   cluster_name = None
   datastax_version = None
   repository_name = None
+  repository_url = None
+  repository_key_url = None
+  repository_use_proxy = True
   config_profile_name = None
   username = None
   password = None
@@ -119,6 +129,10 @@ class OpsCenterConfiguration:
   install_credential_name = None
   install_credential_username = None
   install_credential_key = None
+  install_credential_password = None
+  install_credential_become_user = None
+  install_credential_become_password = None
+  install_credential_become_mode = "sudo"
   cassandra_default_password = None
 
   node_sync: List[NodeSyncConfiguration] = None
@@ -142,13 +156,23 @@ class OpsCenterConfiguration:
       self.cluster_name = config['dse']['cluster_name']
       self.datastax_version = config['dse']['datastax_version']
       self.repository_name = config['dse']['repository_name']
+      self.repository_url = config['dse']['repository_url']
+      self.repository_key_url = config['dse']['repository_key_url']
+      self.repository_use_proxy = config['dse']['repository_use_proxy'] if 'repository_use_proxy' in config['dse'] else False
+
       self.install_credential_name = config['dse']['install_credential_name']
       self.install_credential_username = config['dse']['install_credential_username']
+      self.install_credential_password = config['dse']['install_credential_password'] if 'install_credential_password' in config['dse'] else None
+      self.install_credential_become_user = config['dse']['install_credential_become_user']
+      self.install_credential_become_password = config['dse']['install_credential_become_password']
+      self.install_credential_become_mode = config['dse']['install_credential_become_mode'] or self.install_credential_become_mode
+
       self.cassandra_default_password = config['dse']['cassandra_default_password']
 
       # SSH key
-      with open(config['dse']['install_credential_key_file'], 'r') as key_file:
-        self.install_credential_key = key_file.read()
+      if 'install_credential_key_file' in config['dse']:
+        with open(config['dse']['install_credential_key_file'], 'r') as key_file:
+          self.install_credential_key = key_file.read()
 
       # Initialise config profiles
       if 'config_profiles' in config:

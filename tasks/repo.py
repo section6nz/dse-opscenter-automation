@@ -19,8 +19,10 @@ def create_repo(session_id, config: OpsCenterConfiguration):
             "repositories/",
             {
                 "name": config.install_credential_name,
-                "use-proxy": True,
-                "comment": "Created from python"
+                "use-proxy": config.repository_use_proxy,
+                "comment": "Created from python",
+                "repo-url": config.repository_url,
+                "repo-key-url": config.repository_key_url,
             })
 
         repo_id = repository_response['id']

@@ -17,12 +17,16 @@ def create_credential(session_id, config: OpsCenterConfiguration):
             config,
             session_id,
             "machine_credentials/",
-            {"name": config.install_credential_name,
-             "login-user": config.install_credential_username,
-             "become-mode": "sudo",
-             "ssh-private-key": config.install_credential_key,
-             "use-ssh-keys": True
-             }
+            {
+              "name": config.install_credential_name,
+              "login-user": config.install_credential_username,
+              "login-password": config.install_credential_password,
+              "become-user": config.install_credential_become_user,
+              "become-password": config.install_credential_become_password,
+              "become-mode": config.install_credential_become_mode,
+              "ssh-private-key": config.install_credential_key or None,
+              "use-ssh-keys": config.install_credential_key is not None,
+            }
         )
         creds_id = machine_credential_response['id']
         logging.info("Created credential, machine_credential_id: %s", creds_id)
