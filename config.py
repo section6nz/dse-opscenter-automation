@@ -156,16 +156,16 @@ class OpsCenterConfiguration:
       self.cluster_name = config['dse']['cluster_name']
       self.datastax_version = config['dse']['datastax_version']
       self.repository_name = config['dse']['repository_name']
-      self.repository_url = config['dse']['repository_url']
-      self.repository_key_url = config['dse']['repository_key_url']
+      self.repository_url = config['dse']['repository_url'] if 'repository_url' in config['dse'] else None
+      self.repository_key_url = config['dse']['repository_key_url'] if 'repository_key_url' in config['dse'] else None
       self.repository_use_proxy = config['dse']['repository_use_proxy'] if 'repository_use_proxy' in config['dse'] else False
 
       self.install_credential_name = config['dse']['install_credential_name']
       self.install_credential_username = config['dse']['install_credential_username']
       self.install_credential_password = config['dse']['install_credential_password'] if 'install_credential_password' in config['dse'] else None
-      self.install_credential_become_user = config['dse']['install_credential_become_user']
-      self.install_credential_become_password = config['dse']['install_credential_become_password']
-      self.install_credential_become_mode = config['dse']['install_credential_become_mode'] or self.install_credential_become_mode
+      self.install_credential_become_user = config['dse']['install_credential_become_user'] if 'install_credential_become_user' in config['dse'] else None
+      self.install_credential_become_password = config['dse']['install_credential_become_password'] if 'install_credential_become_password' in config['dse'] else None
+      self.install_credential_become_mode = config['dse']['install_credential_become_mode'] if 'install_credential_become_mode' in config['dse'] else self.install_credential_become_mode
 
       self.cassandra_default_password = config['dse']['cassandra_default_password']
 
